@@ -21,8 +21,7 @@ def login():
          flash('You were successfully logged in')
          return redirect(url_for('home'))
    else:
-      error = 'Invalid request. Please try again!'
-      flash(error)
+      error = None
       return render_template('login.html', error = error)
 
 @app.route('/logout')
