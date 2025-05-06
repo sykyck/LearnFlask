@@ -12,13 +12,18 @@ def home():
 def login():
    error = None
    if request.method == 'POST':
-      if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+      if request.form['password'] != 'admin':
          error = 'Invalid username or password. Please try again!'
+         flash(error)
+         return render_template('login.html', error = error)
       else:
          session['username'] = request.form['username']
          flash('You were successfully logged in')
          return redirect(url_for('home'))
-   return render_template('login.html', error = error)
+   else:
+      error = 'Invalid request. Please try again!'
+      flash(error)
+      return render_template('login.html', error = error)
 
 @app.route('/logout')
 def logout():
