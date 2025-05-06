@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response, session, redirect, url_for
+from flask import Flask, flash, render_template, request, make_response, session, redirect, url_for
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Required for session management
 
@@ -10,10 +10,15 @@ def home():
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+   error = None
    if request.method == 'POST':
-      session['username'] = request.form['username']
-      return redirect(url_for('home'))
-   return render_template('login.html')
+      if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+         error = 'Invalid username or password. Please try again!'
+      else:
+         session['username'] = request.form['username']
+         flash('You were successfully logged in')
+         return redirect(url_for('home'))
+   return render_template('login.html', error = error)
 
 @app.route('/logout')
 def logout():
